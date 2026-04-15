@@ -50,15 +50,23 @@ def request_text(opener, method: str, url: str) -> str:
 
 def render_status_block(status: str, timestamp: str, checks: list[CheckResult]) -> str:
     """Render the README status block."""
+    def get_icon(s: str) -> str:
+        if s == "PASS":
+            return "✅"
+        elif s == "FAIL":
+            return "❌"
+        else:
+            return "⚠️"
+    
     lines = [
         README_STATUS_START,
-        f"- Latest local container test: `{status}`",
+        f"- Latest local container test: {get_icon(status)} `{status}`",
         f"- Executed at (UTC): `{timestamp}`",
         f"- Verification command: `bash scripts/run-local-container-tests.sh`",
         f"- Detailed report: [docs/local-container-test-status.md](docs/local-container-test-status.md)",
     ]
     for check in checks:
-        lines.append(f"- Check `{check.name}`: `{check.status}`")
+        lines.append(f"- Check `{check.name}`: {get_icon(check.status)} `{check.status}`")
     lines.append(README_STATUS_END)
     return "\n".join(lines)
 

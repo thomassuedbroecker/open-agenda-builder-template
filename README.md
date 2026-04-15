@@ -3,17 +3,17 @@
 Build personal agendas from a configurable event schedule with a single FastAPI container, browser-isolated concurrent usage, and only open-source tooling.
 
 <!-- local-container-status:start -->
-- Latest local container test: `PASS`
-- Executed at (UTC): `2026-04-15T19:32:34Z`
+- Latest local container test: ✅ `PASS`
+- Executed at (UTC): `2026-04-15T19:55:56Z`
 - Verification command: `bash scripts/run-local-container-tests.sh`
 - Detailed report: [docs/local-container-test-status.md](docs/local-container-test-status.md)
-- Check `health`: `PASS`
-- Check `sessions`: `PASS`
-- Check `agenda-add`: `PASS`
-- Check `agenda-read`: `PASS`
-- Check `session-isolation`: `PASS`
-- Check `export-json`: `PASS`
-- Check `branding`: `PASS`
+- Check `health`: ✅ `PASS`
+- Check `sessions`: ✅ `PASS`
+- Check `agenda-add`: ✅ `PASS`
+- Check `agenda-read`: ✅ `PASS`
+- Check `session-isolation`: ✅ `PASS`
+- Check `export-json`: ✅ `PASS`
+- Check `branding`: ✅ `PASS`
 <!-- local-container-status:end -->
 
 ## What It Does
@@ -69,6 +69,39 @@ The project is implemented with pinned open-source Python dependencies. The exac
 - Bash and curl for smoke test orchestration
 - Python 3.12 as the declared runtime
 
+
+## Test Plan
+
+The repository uses two verification layers and keeps their documentation in sync with executed results:
+
+1. Python test suite for parser, service, and API behavior.
+2. Local container smoke test for the supported deployment mode.
+
+### Python Test Command
+
+```bash
+source .venv/bin/activate
+python -m pytest
+```
+
+### Local Container Test Command
+
+```bash
+bash scripts/run-local-container-tests.sh
+```
+
+The smoke test:
+
+- Builds the Docker image locally
+- Starts the container on `127.0.0.1:18082`
+- Verifies `/health`
+- Verifies session loading
+- Verifies add/export flows
+- Verifies browser-scoped agenda isolation using two cookie jars
+- Writes machine-readable status to [testing/local-container-status.json](testing/local-container-status.json)
+- Writes human-readable status to [docs/local-container-test-status.md](docs/local-container-test-status.md)
+- Updates the status block in this README
+
 ## Quick Start
 
 ### Local Python Run
@@ -120,38 +153,6 @@ See [.env.example](.env.example) for the full template.
 - Deployment: [deployment/README.md](deployment/README.md)
 - Documentation: [docs/README.md](docs/README.md)
 - Examples: [examples/README.md](examples/README.md)
-
-## Test Plan
-
-The repository uses two verification layers and keeps their documentation in sync with executed results:
-
-1. Python test suite for parser, service, and API behavior.
-2. Local container smoke test for the supported deployment mode.
-
-### Python Test Command
-
-```bash
-source .venv/bin/activate
-python -m pytest
-```
-
-### Local Container Test Command
-
-```bash
-bash scripts/run-local-container-tests.sh
-```
-
-The smoke test:
-
-- Builds the Docker image locally
-- Starts the container on `127.0.0.1:18082`
-- Verifies `/health`
-- Verifies session loading
-- Verifies add/export flows
-- Verifies browser-scoped agenda isolation using two cookie jars
-- Writes machine-readable status to [testing/local-container-status.json](testing/local-container-status.json)
-- Writes human-readable status to [docs/local-container-test-status.md](docs/local-container-test-status.md)
-- Updates the status block in this README
 
 ## Documentation And Test Sync Rule
 
