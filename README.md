@@ -1,4 +1,4 @@
-# Open Event Agenda Builder
+# Open Agenda Builder Template
 
 Build personal agendas from a configurable event schedule with a single FastAPI container, browser-isolated concurrent usage, and only open-source tooling.
 
@@ -94,7 +94,7 @@ docker run --rm -p 8082:8082 open-event-agenda-builder
 The application is generic and configurable through environment variables:
 
 ```bash
-APP_NAME="Open Event Agenda Builder"
+APP_NAME="Open Agenda Builder Template"
 EVENT_NAME="Sample Event Program"
 EVENT_DAY_LABEL="Program Day"
 EVENT_DATE="2026-04-15"

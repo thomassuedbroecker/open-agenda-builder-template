@@ -1,6 +1,6 @@
 # Dependency And Tooling Transparency
 
-This document records the open-source runtime, library, and verification tooling used by Open Event Agenda Builder.
+This document records the open-source runtime, library, and verification tooling used by Open Agenda Builder Template.
 
 ## Project License
 

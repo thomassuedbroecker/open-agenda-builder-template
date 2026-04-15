@@ -2,7 +2,7 @@
 
 ## Overview
 
-Open Event Agenda Builder is a local-first FastAPI application for building personal agendas from a configurable event schedule. The current architecture is designed for longer-term internal or cross-company reuse rather than one-off prototype usage.
+Open Agenda Builder Template is a local-first FastAPI application for building personal agendas from a configurable event schedule. The current architecture is designed for longer-term internal or cross-company reuse rather than one-off prototype usage.
 
 ## Core Design Decisions
 

@@ -5,7 +5,7 @@ description = "Personal agenda builder for configurable event programs"
 requires-python = ">=3.12"
 license = {text = "Apache License 2.0"}
 authors = [
-    {name = "Open Event Agenda Builder Team"}
+    {name = "Open Agenda Builder Template Team"}
 ]
 readme = "README.md"
 

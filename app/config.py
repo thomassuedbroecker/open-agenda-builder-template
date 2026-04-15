@@ -9,7 +9,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
-    app_name: str = "Open Event Agenda Builder"
+    app_name: str = "Open Agenda Builder Template"
     app_version: str = "1.1.0"
     app_description: str = (
         "Build personal agendas from a configurable event schedule using only open-source tooling."
