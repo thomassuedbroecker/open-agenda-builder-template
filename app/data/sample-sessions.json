@@ -1,0 +1,67 @@
+[
+  {
+    "id": "opening-remarks",
+    "name": "Opening Remarks",
+    "start_time": "09:00",
+    "end_time": "09:30",
+    "stage": "Main Hall",
+    "speaker": "Program Team",
+    "format": "Briefing",
+    "topic": "Welcome",
+    "location": "Hall A",
+    "track": "General",
+    "description": "Kickoff for the day."
+  },
+  {
+    "id": "operations-planning",
+    "name": "Operations Planning Session",
+    "start_time": "10:00",
+    "end_time": "11:00",
+    "stage": "Workshop Room 1",
+    "speaker": "Operations Lead",
+    "format": "Workshop",
+    "topic": "Planning",
+    "location": "Room 1",
+    "track": "Operations",
+    "description": "Planning session for the operations team."
+  },
+  {
+    "id": "product-roundtable",
+    "name": "Product Roundtable",
+    "start_time": "11:15",
+    "end_time": "12:00",
+    "stage": "Collaboration Space",
+    "speaker": "Product Team",
+    "format": "Roundtable",
+    "topic": "Roadmap",
+    "location": "Room 2",
+    "track": "Product",
+    "description": "Roadmap discussion for product stakeholders."
+  },
+  {
+    "id": "customer-workshop",
+    "name": "Customer Workshop",
+    "start_time": "13:00",
+    "end_time": "14:00",
+    "stage": "Workshop Room 2",
+    "speaker": "Experience Team",
+    "format": "Workshop",
+    "topic": "Customer Experience",
+    "location": "Room 3",
+    "track": "Customer",
+    "description": "Workshop on customer journey improvements."
+  },
+  {
+    "id": "closing-summary",
+    "name": "Closing Summary",
+    "start_time": "16:30",
+    "end_time": "17:00",
+    "stage": "Main Hall",
+    "speaker": "Program Team",
+    "format": "Briefing",
+    "topic": "Wrap-up",
+    "location": "Hall A",
+    "track": "General",
+    "description": "Closing summary for the day."
+  }
+]

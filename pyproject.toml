@@ -1,0 +1,55 @@
+[project]
+name = "open-event-agenda-builder"
+version = "1.1.0"
+description = "Personal agenda builder for configurable event programs"
+requires-python = ">=3.12"
+license = {text = "Apache License 2.0"}
+authors = [
+    {name = "Open Event Agenda Builder Team"}
+]
+readme = "README.md"
+
+dependencies = [
+    "fastapi==0.115.0",
+    "uvicorn[standard]==0.32.0",
+    "jinja2==3.1.4",
+    "pydantic==2.9.2",
+    "pydantic-settings==2.5.2",
+    "icalendar==6.0.1",
+    "python-multipart==0.0.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.3",
+    "pytest-asyncio==0.24.0",
+    "pytest-cov==5.0.0",
+    "httpx==0.27.2",
+    "ruff==0.7.0",
+    "mypy==1.13.0",
+    "ipython==8.29.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "--cov=app --cov-report=html --cov-report=term-missing"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

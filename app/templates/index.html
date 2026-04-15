@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Program - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Shared Program</h2>
+    <p class="page-description">
+        Build a personal agenda from the shared event schedule. Your agenda is isolated per browser with an essential session cookie.
+    </p>
+    <div class="stats">
+        <span class="stat-badge">📅 {{ total_sessions }} sessions available</span>
+        <span class="stat-badge" id="selected-count">✅ 0 selected</span>
+    </div>
+    <p class="page-description">
+        Data source: {{ data_source_name }}{% if track_filter %} | Track filter: {{ track_filter }}{% endif %} | Time window: {{ time_window }}
+    </p>
+</div>
+
+<div class="actions-bar">
+    <button class="btn btn-secondary" onclick="viewMyAgenda()">
+        📋 View {{ agenda_label }}
+    </button>
+    <button class="btn btn-secondary" onclick="showImportDialog()">
+        📥 Import Agenda
+    </button>
+</div>
+
+{% if sessions %}
+<div class="sessions-grid">
+    {% for session in sessions %}
+    <div class="session-card" data-session-id="{{ session.id }}">
+        <div class="session-header">
+            <div class="session-time">
+                <span class="time-badge">🕐 {{ session.format_time_range() }}</span>
+            </div>
+            <div class="session-format">
+                <span class="format-badge">{{ session.format }}</span>
+            </div>
+        </div>
+        
+        <h3 class="session-title">{{ session.name }}</h3>
+        
+        <div class="session-details">
+            <div class="detail-item">
+                <span class="detail-icon">👤</span>
+                <span class="detail-text">{{ session.speaker }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-icon">📍</span>
+                <span class="detail-text">{{ session.stage }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-icon">🏷️</span>
+                <span class="detail-text">{{ session.topic }}</span>
+            </div>
+        </div>
+        
+        <div class="session-actions">
+            <button 
+                class="btn btn-primary add-session-btn" 
+                onclick="addSession('{{ session.id }}')"
+                data-session-id="{{ session.id }}">
+                ➕ Add to {{ agenda_label }}
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No sessions are available for the configured schedule window.</p>
+</div>
+{% endif %}
+
+<!-- Import Dialog -->
+<div id="import-dialog" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Import Agenda</h3>
+            <button class="close-btn" onclick="closeImportDialog()">✕</button>
+        </div>
+        <div class="modal-body">
+            <p>Upload a previously exported JSON file to restore your personal agenda.</p>
+            <input type="file" id="import-file" accept=".json" class="file-input">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeImportDialog()">Cancel</button>
+            <button class="btn btn-primary" onclick="importAgenda()">Import</button>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Toast -->
+<div id="notification" class="notification" style="display: none;"></div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Update selected count on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    await updateSelectedCount();
+    await highlightSelectedSessions();
+});
+</script>
+{% endblock %}

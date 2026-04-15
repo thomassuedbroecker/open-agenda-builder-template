@@ -1,0 +1,40 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Open Event Agenda Builder//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Sample Event Program - My Agenda
+X-WR-TIMEZONE:Europe/Berlin
+BEGIN:VEVENT
+SUMMARY:Opening Remarks
+DTSTART:20260415T090000
+DTEND:20260415T093000
+LOCATION:Main Hall (Hall A)
+DESCRIPTION:Speaker: Program Team\nFormat: Briefing\nTopic: Welcome
+UID:opening-remarks@agenda-builder.local
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Operations Planning Session
+DTSTART:20260415T100000
+DTEND:20260415T110000
+LOCATION:Workshop Room 1 (Room 1)
+DESCRIPTION:Speaker: Operations Lead\nFormat: Workshop\nTopic: Planning
+UID:operations-planning@agenda-builder.local
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Customer Workshop
+DTSTART:20260415T130000
+DTEND:20260415T140000
+LOCATION:Workshop Room 2 (Room 3)
+DESCRIPTION:Speaker: Experience Team\nFormat: Workshop\nTopic: Customer Experience
+UID:customer-workshop@agenda-builder.local
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Closing Summary
+DTSTART:20260415T163000
+DTEND:20260415T170000
+LOCATION:Main Hall (Hall A)
+DESCRIPTION:Speaker: Program Team\nFormat: Briefing\nTopic: Wrap-up
+UID:closing-summary@agenda-builder.local
+END:VEVENT
+END:VCALENDAR

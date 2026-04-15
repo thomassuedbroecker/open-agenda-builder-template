@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}{{ agenda_label }} - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ agenda_label }}</h2>
+    <p class="page-description">
+        Your selected sessions for {{ event_name }} on {{ event_date }}.
+    </p>
+    <div class="stats">
+        <span class="stat-badge">✅ {{ total_sessions }} session{% if total_sessions != 1 %}s{% endif %} selected</span>
+    </div>
+    <p class="page-description">
+        The browser cookie `{{ agenda_cookie_name }}` is essential-only, session-scoped, and stores serialized agenda state without personal profile data.
+    </p>
+</div>
+
+<div class="actions-bar">
+    <button class="btn btn-secondary" onclick="window.location.href='/'">
+        ← Back to Program
+    </button>
+    <div class="action-group">
+        <button class="btn btn-primary" onclick="exportJSON()" {% if total_sessions == 0 %}disabled{% endif %}>
+            📥 Export JSON
+        </button>
+        <button class="btn btn-primary" onclick="exportICS()" {% if total_sessions == 0 %}disabled{% endif %}>
+            📅 Export Calendar
+        </button>
+        <button class="btn btn-danger" onclick="clearAgenda()" {% if total_sessions == 0 %}disabled{% endif %}>
+            🗑️ Clear All
+        </button>
+    </div>
+</div>
+
+{% if sessions %}
+<div class="agenda-timeline">
+    {% for session in sessions %}
+    <div class="agenda-item" data-session-id="{{ session.id }}">
+        <div class="agenda-time">
+            <div class="time-display">{{ session.start_time.strftime('%H:%M') }}</div>
+            <div class="time-separator">|</div>
+            <div class="time-display">{{ session.end_time.strftime('%H:%M') }}</div>
+        </div>
+        
+        <div class="agenda-content">
+            <div class="agenda-header">
+                <h3 class="agenda-title">{{ session.name }}</h3>
+                <span class="format-badge">{{ session.format }}</span>
+            </div>
+            
+            <div class="agenda-details">
+                <div class="detail-item">
+                    <span class="detail-icon">👤</span>
+                    <span class="detail-text">{{ session.speaker }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">📍</span>
+                    <span class="detail-text">{{ session.stage }}{% if session.location %} ({{ session.location }}){% endif %}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">🏷️</span>
+                    <span class="detail-text">{{ session.topic }}</span>
+                </div>
+            </div>
+            
+            <div class="agenda-actions">
+                <button 
+                    class="btn btn-danger btn-sm" 
+                    onclick="removeSession('{{ session.id }}')"
+                    title="Remove from agenda">
+                    ✕ Remove
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="agenda-summary">
+    <h3>📊 Summary</h3>
+    <div class="summary-stats">
+        <div class="summary-item">
+            <span class="summary-label">Total Sessions:</span>
+            <span class="summary-value">{{ total_sessions }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">First Session:</span>
+            <span class="summary-value">{{ sessions[0].start_time.strftime('%H:%M') }}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Last Session:</span>
+            <span class="summary-value">{{ sessions[-1].end_time.strftime('%H:%M') }}</span>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">📭</div>
+    <h3>No Sessions Selected</h3>
+    <p>You haven't added any sessions to your agenda yet.</p>
+    <button class="btn btn-primary" onclick="window.location.href='/'">
+        Browse Program
+    </button>
+</div>
+{% endif %}
+
+<!-- Notification Toast -->
+<div id="notification" class="notification" style="display: none;"></div>
+
+{% endblock %}

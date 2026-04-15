@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "executed_at_utc": "2026-04-15T19:32:34Z",
+  "base_url": "http://127.0.0.1:18082",
+  "checks": [
+    {
+      "name": "health",
+      "status": "PASS",
+      "details": "Health endpoint responded with healthy status"
+    },
+    {
+      "name": "sessions",
+      "status": "PASS",
+      "details": "Loaded 5 sessions from the container"
+    },
+    {
+      "name": "agenda-add",
+      "status": "PASS",
+      "details": "Added session `opening-remarks`"
+    },
+    {
+      "name": "agenda-read",
+      "status": "PASS",
+      "details": "Primary browser session retained its agenda"
+    },
+    {
+      "name": "session-isolation",
+      "status": "PASS",
+      "details": "Separate browser cookies receive separate agendas"
+    },
+    {
+      "name": "export-json",
+      "status": "PASS",
+      "details": "JSON export contains generic event metadata"
+    },
+    {
+      "name": "branding",
+      "status": "PASS",
+      "details": "Agenda page is free of legacy AI-conference branding"
+    }
+  ]
+}
