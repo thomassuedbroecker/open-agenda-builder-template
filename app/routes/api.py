@@ -114,7 +114,7 @@ async def export_ics(
     
     # Create calendar
     cal = Calendar()
-    cal.add("prodid", "-//Open Event Agenda Builder//EN")
+    cal.add("prodid", f"-//{settings.app_name}//EN")
     cal.add("version", "2.0")
     cal.add("calscale", "GREGORIAN")
     cal.add("method", "PUBLISH")

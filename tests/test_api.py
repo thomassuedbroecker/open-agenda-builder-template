@@ -37,6 +37,7 @@ def test_add_session_to_agenda(client: TestClient):
 
     assert response.status_code == 200
     assert response.json()["success"] is True
+    assert response.json()["conflicts"] == []
 
     agenda_sessions = client.get("/api/agenda/sessions").json()
     assert [item["id"] for item in agenda_sessions] == [session_id]
@@ -78,6 +79,21 @@ def test_export_ics_empty_agenda(client: TestClient):
     response = client.get("/api/agenda/export/ics")
 
     assert response.status_code == 404
+
+
+def test_export_ics_contains_calendar_data(client: TestClient):
+    """Test exporting agenda as ICS."""
+    session_id = client.get("/api/sessions").json()[0]["id"]
+    client.post(f"/api/agenda/add?session_id={session_id}")
+
+    response = client.get("/api/agenda/export/ics")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/calendar")
+    body = response.text
+    assert "BEGIN:VCALENDAR" in body
+    assert "PRODID:-//Open Agenda Builder Template//EN" in body
+    assert f"UID:{session_id}@agenda-builder.local" in body
 
 
 def test_import_agenda_invalid_json(client: TestClient):
@@ -122,6 +138,32 @@ def test_import_agenda_wrong_version(client: TestClient):
     assert response.status_code == 400
     data = response.json()
     assert "unsupported schema version" in data["detail"].lower()
+
+
+def test_import_agenda_valid(client: TestClient):
+    """Test importing a valid agenda export."""
+    sessions = client.get("/api/sessions").json()
+    selected_ids = [sessions[0]["id"], sessions[-1]["id"]]
+    valid_data = {
+        "version": "1.0",
+        "session_ids": selected_ids,
+    }
+    files = {
+        "file": (
+            "agenda.json",
+            BytesIO(json.dumps(valid_data).encode()),
+            "application/json",
+        )
+    }
+
+    response = client.post("/api/agenda/import", files=files)
+
+    assert response.status_code == 200
+    assert response.json()["success"] is True
+    assert response.json()["session_count"] == 2
+
+    agenda_sessions = client.get("/api/agenda/sessions").json()
+    assert [item["id"] for item in agenda_sessions] == selected_ids
 
 
 def test_clear_agenda(client: TestClient):

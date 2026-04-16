@@ -1,4 +1,4 @@
-# Multi-stage build for Open Event Agenda Builder
+# Multi-stage build for Open Agenda Builder Template
 FROM python:3.12-slim AS builder
 
 # Set working directory

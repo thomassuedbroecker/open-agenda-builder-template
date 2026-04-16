@@ -2,9 +2,11 @@
 
 Build personal agendas from a configurable event schedule with a single FastAPI container, browser-isolated concurrent usage, and only open-source tooling.
 
+Navigation: [Code](app/README.md) | [Tests](tests/README.md) | [Testing Automation](testing/README.md) | [Deployment](deployment/README.md) | [Docs Index](docs/README.md) | [Examples](examples/README.md)
+
 <!-- local-container-status:start -->
 - Latest local container test: ✅ `PASS`
-- Executed at (UTC): `2026-04-15T19:55:56Z`
+- Executed at (UTC): `2026-04-16T21:14:25Z`
 - Verification command: `bash scripts/run-local-container-tests.sh`
 - Detailed report: [docs/local-container-test-status.md](docs/local-container-test-status.md)
 - Check `health`: ✅ `PASS`
@@ -16,7 +18,23 @@ Build personal agendas from a configurable event schedule with a single FastAPI 
 - Check `branding`: ✅ `PASS`
 <!-- local-container-status:end -->
 
-## What It Does
+## Table of Contents
+
+1. [Overview](#1-overview)
+2. [Privacy And GDPR-Oriented Design](#2-privacy-and-gdpr-oriented-design)
+3. [Dependencies And Licenses](#3-dependencies-and-licenses)
+4. [Quick Start](#4-quick-start)
+5. [Test And Verification](#5-test-and-verification)
+6. [Configuration](#6-configuration)
+7. [Repository Navigation](#7-repository-navigation)
+8. [Documentation Sync Rule](#8-documentation-sync-rule)
+9. [Architecture](#9-architecture)
+10. [Deployment](#10-deployment)
+11. [Example Export Files](#11-example-export-files)
+12. [Licensing](#12-licensing)
+13. [Source Material Policy](#13-source-material-policy)
+
+## 1. Overview
 
 - Loads event sessions from a local JSON schedule file
 - Lets each browser build its own agenda with overlap detection
@@ -25,7 +43,7 @@ Build personal agendas from a configurable event schedule with a single FastAPI 
 - Supports concurrent usage through an anonymous essential cookie
 - Runs as a single local container with no external SaaS dependency
 
-## Privacy And GDPR-Oriented Design
+## 2. Privacy And GDPR-Oriented Design
 
 - No analytics, adtech, telemetry, or third-party trackers
 - No user accounts, names, email addresses, or profile storage
@@ -35,11 +53,11 @@ Build personal agendas from a configurable event schedule with a single FastAPI 
 
 This reduces privacy risk, but it is not a legal opinion. Real deployments still need their own records-of-processing, retention review, and legal validation.
 
-## Dependencies and Licenses
+## 3. Dependencies And Licenses
 
 The project is implemented with pinned open-source Python dependencies. The exact runtime and dev dependencies are documented in [docs/dependency-transparency.md](docs/dependency-transparency.md).
 
-### Runtime dependencies
+### 3.1 Runtime Dependencies
 
 | Package | Version | License | Purpose |
 |---|---|---|---|
@@ -51,7 +69,7 @@ The project is implemented with pinned open-source Python dependencies. The exac
 | icalendar | 6.0.1 | BSD-2-Clause | ICS calendar export generation |
 | python-multipart | 0.0.12 | Apache-2.0 | Multipart form / JSON import handling |
 
-### Development and verification dependencies
+### 3.2 Development And Verification Dependencies
 
 | Package | Version | License | Purpose |
 |---|---|---|---|
@@ -63,28 +81,58 @@ The project is implemented with pinned open-source Python dependencies. The exac
 | mypy | 1.13.0 | MIT | Static type checking |
 | ipython | 8.29.0 | BSD-3-Clause | Optional developer shell |
 
-### Additional open-source tooling
+### 3.3 Additional Open-Source Tooling
 
 - Docker for image build and local container verification
 - Bash and curl for smoke test orchestration
 - Python 3.12 as the declared runtime
 
+## 4. Quick Start
 
-## Test Plan
+### 4.1 Local Python Run
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt -r requirements-dev.txt
+uvicorn app.main:app --reload --port 8082
+```
+
+Open `http://localhost:8082` and verify `http://localhost:8082/health`. The main user interface is available at `http://localhost:8082/my-agenda`.
+
+### 4.2 Local Container Run
+
+```bash
+docker build -t open-event-agenda-builder .
+docker run --rm -p 8082:8082 open-event-agenda-builder
+```
+
+## 5. Test And Verification
 
 The repository uses two verification layers and keeps their documentation in sync with executed results:
 
 1. Python test suite for parser, service, and API behavior.
 2. Local container smoke test for the supported deployment mode.
 
-### Python Test Command
+### 5.1 Python Test Command
 
 ```bash
 source .venv/bin/activate
 python -m pytest
+
+# or without shell activation
+./.venv/bin/python -m pytest
 ```
 
-### Local Container Test Command
+The Python suite currently verifies:
+
+- Parser validation and JSON schedule loading
+- Track and time filtering
+- Agenda overlap detection
+- Agenda add, remove, clear, import, and export behavior
+- Browser-scoped agenda isolation for the API
+
+### 5.2 Local Container Test Command
 
 ```bash
 bash scripts/run-local-container-tests.sh
@@ -102,27 +150,7 @@ The smoke test:
 - Writes human-readable status to [docs/local-container-test-status.md](docs/local-container-test-status.md)
 - Updates the status block in this README
 
-## Quick Start
-
-### Local Python Run
-
-```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt -r requirements-dev.txt
-uvicorn app.main:app --reload --port 8082
-```
-
-Open `http://localhost:8082` and verify `http://localhost:8082/health`. The main user interface is available at `http://localhost:8082/my-agenda`.
-
-### Local Container Run
-
-```bash
-docker build -t open-event-agenda-builder .
-docker run --rm -p 8082:8082 open-event-agenda-builder
-```
-
-## Configuration
+## 6. Configuration
 
 The application is generic and configurable through environment variables:
 
@@ -146,7 +174,7 @@ SECURE_COOKIE=false
 
 See [.env.example](.env.example) for the full template.
 
-## Repository Structure
+## 7. Repository Navigation
 
 - Code: [app/README.md](app/README.md)
 - Tests: [tests/README.md](tests/README.md)
@@ -154,7 +182,7 @@ See [.env.example](.env.example) for the full template.
 - Documentation: [docs/README.md](docs/README.md)
 - Examples: [examples/README.md](examples/README.md)
 
-## Documentation And Test Sync Rule
+## 8. Documentation Sync Rule
 
 When behavior changes, update all three together:
 
@@ -164,13 +192,13 @@ When behavior changes, update all three together:
 
 This repository treats documentation as part of the release surface, not as an afterthought.
 
-## Architecture
+## 9. Architecture
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the current design, including multi-user isolation, stateless process behavior, and privacy controls.
 
-### Architecture diagrams
+### 9.1 Architecture Diagrams
 
-#### Static view
+#### 9.1.1 Static View
 
 ```mermaid
 flowchart TD
@@ -193,7 +221,7 @@ flowchart TD
   API -->|read/write| Cookie
 ```
 
-#### Dynamic view
+#### 9.1.2 Dynamic View
 
 ```mermaid
 sequenceDiagram
@@ -211,19 +239,19 @@ sequenceDiagram
 
 These diagrams show the implementation’s main actors, where session data is loaded from the bundled JSON schedule, and how browser-specific agenda state is managed through cookie-backed requests.
 
-## Deployment
+## 10. Deployment
 
 Only local single-container operation is documented and verified by default. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
-## Example Export Files
+## 11. Example Export Files
 
 - JSON example: [examples/agenda-export.json](examples/agenda-export.json)
 - ICS example: [examples/agenda-export.ics](examples/agenda-export.ics)
 
-## Licensing
+## 12. Licensing
 
 This project is licensed under Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
-## Source Material Policy
+## 13. Source Material Policy
 
 The bundled sample schedule is original and neutralized. If you adapt public agenda structures, prefer sources with clear reuse rights, and avoid copying logos, trademarks, photos, or personal-profile content. Public-sector schedule formats such as selected NIST event pages can be safer structural references, but you must still verify reuse conditions for the exact materials you copy.

@@ -1,6 +1,6 @@
 {
   "status": "PASS",
-  "executed_at_utc": "2026-04-15T19:55:56Z",
+  "executed_at_utc": "2026-04-16T21:14:25Z",
   "base_url": "http://127.0.0.1:18082",
   "checks": [
     {
@@ -36,7 +36,7 @@
     {
       "name": "branding",
       "status": "PASS",
-      "details": "Agenda page is free of legacy AI-conference branding"
+      "details": "Agenda page is free of legacy hardcoded event branding"
     }
   ]
 }

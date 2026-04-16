@@ -141,6 +141,15 @@ def test_get_agenda_sessions_empty(agenda_service: AgendaService):
     assert sessions == []
 
 
+def test_get_conflicts_for_session_excludes_selected_session(agenda_service: AgendaService):
+    """Test conflict lookup excludes the selected session itself."""
+    agenda = PersonalAgenda(sessions=["session-2", "session-3"])
+
+    conflicts = agenda_service.get_conflicts_for_session(agenda, "session-2")
+
+    assert [session.id for session in conflicts] == ["session-3"]
+
+
 @pytest.mark.asyncio
 async def test_import_agenda_valid(agenda_service: AgendaService):
     """Test importing a valid agenda."""

@@ -1,4 +1,4 @@
-"""Local-container smoke test for the Open Event Agenda Builder."""
+"""Local-container smoke test for the Open Agenda Builder Template."""
 
 from __future__ import annotations
 
@@ -161,8 +161,8 @@ def run_smoke_test(base_url: str) -> list[CheckResult]:
 
     agenda_page = request_text(primary_client, "GET", f"{base_url}/my-agenda")
     if "AI Conference" in agenda_page:
-        raise AssertionError("Legacy AI conference branding is still present in the agenda page")
-    checks.append(CheckResult("branding", "PASS", "Agenda page is free of legacy AI-conference branding"))
+        raise AssertionError("Legacy hardcoded conference branding is still present in the agenda page")
+    checks.append(CheckResult("branding", "PASS", "Agenda page is free of legacy hardcoded event branding"))
 
     return checks
 

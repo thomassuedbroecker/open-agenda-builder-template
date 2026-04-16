@@ -102,11 +102,16 @@ class AgendaService:
             return sessions
 
     def _find_overlapping_sessions(
-        self, agenda: PersonalAgenda, new_session: Session
+        self,
+        agenda: PersonalAgenda,
+        new_session: Session,
+        exclude_session_id: Optional[str] = None,
     ) -> List[Session]:
         """Find sessions in the agenda that overlap with the new session."""
         overlapping = []
         for session_id in agenda.sessions:
+            if exclude_session_id and session_id == exclude_session_id:
+                continue
             session = self._sessions_by_id.get(session_id)
             if session and session.overlaps_with(new_session):
                 overlapping.append(session)
@@ -118,7 +123,11 @@ class AgendaService:
             session = self._sessions_by_id.get(session_id)
             if not session:
                 return []
-            return self._find_overlapping_sessions(agenda, session)
+            return self._find_overlapping_sessions(
+                agenda,
+                session,
+                exclude_session_id=session_id,
+            )
 
     def get_agenda_conflicts(self, agenda: PersonalAgenda) -> Dict[str, List[Session]]:
         """Return all overlapping sessions grouped by session id."""

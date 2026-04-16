@@ -1,16 +1,26 @@
-# Examples Section
+# Examples
+
+Navigation: [Repository Root](../README.md) | [Tests](../tests/README.md) | [Dependency Transparency](../docs/dependency-transparency.md)
 
 This directory contains example export artifacts for the current data model.
 
-## Files
+## Table of Contents
+
+1. [Purpose](#1-purpose)
+2. [Files](#2-files)
+3. [Sync Rule](#3-sync-rule)
+
+## 1. Purpose
+
+These sample artifacts document the current export formats produced by the application.
+
+## 2. Files
 
 - [agenda-export.json](agenda-export.json): example JSON export
 - [agenda-export.ics](agenda-export.ics): example iCalendar export
 
-## Purpose
+## 3. Sync Rule
 
-- Show the current export schema
-- Support manual inspection
-- Help keep code and documentation aligned
-
-These files use neutralized sample data and should stay in sync with the export format implemented in the application.
+- Keep these examples aligned with the export schema implemented in the application
+- Update them when export field names, metadata, or calendar headers change
+- Use only neutralized sample data

@@ -1,16 +1,27 @@
 # Architecture
 
-## Overview
+Navigation: [Repository Root](../README.md) | [Docs Index](README.md) | [Deployment Guide](DEPLOYMENT.md)
+
+## Table of Contents
+
+1. [Overview](#1-overview)
+2. [Core Design Decisions](#2-core-design-decisions)
+3. [Component Map](#3-component-map)
+4. [Data Flow](#4-data-flow)
+5. [Testing Strategy](#5-testing-strategy)
+6. [Current Constraints](#6-current-constraints)
+
+## 1. Overview
 
 Open Agenda Builder Template is a local-first FastAPI application for building personal agendas from a configurable event schedule. The current architecture is designed for longer-term internal or cross-company reuse rather than one-off prototype usage.
 
-## Core Design Decisions
+## 2. Core Design Decisions
 
-### 1. Generic Event Metadata
+### 2.1 Generic Event Metadata
 
 The application no longer hardcodes any conference or company identity. Event name, date, timezone, labels, schedule source, track filter, and time window are all configuration-driven.
 
-### 2. Local JSON Schedule Source
+### 2.2 Local JSON Schedule Source
 
 The supported source of truth is a local JSON file.
 
@@ -24,7 +35,7 @@ Why:
 
 The bundled sample schedule is neutralized and avoids personal data.
 
-### 3. Concurrent Browser Usage
+### 2.3 Concurrent Browser Usage
 
 Each browser stores its agenda state in one essential session cookie. The application process stays stateless with respect to user-specific agenda data.
 
@@ -37,7 +48,7 @@ Properties:
 - Restart does not invalidate already stored browser agendas
 - Horizontal scaling is simpler because user-specific state is not stored in process memory
 
-### 4. Local-First Privacy Model
+### 2.4 Local-First Privacy Model
 
 The application is intentionally minimal:
 
@@ -49,11 +60,11 @@ The application is intentionally minimal:
 
 This is privacy-by-design oriented, but legal compliance still depends on deployment context.
 
-### 5. Single-Container Runtime
+### 2.5 Single-Container Runtime
 
 The application serves API, templates, static assets, and export endpoints from one FastAPI container. This keeps operation simple and makes the local-container smoke test representative of real usage.
 
-### 6. Twelve-Factor Alignment
+### 2.6 Twelve-Factor Alignment
 
 The implementation is aligned to the twelve-factor methodology where it materially applies:
 
@@ -70,9 +81,9 @@ The implementation is aligned to the twelve-factor methodology where it material
 - Logs: application logs go to stdout/stderr
 - Admin processes: verification and maintenance commands are one-off scripts
 
-## Component Map
+## 3. Component Map
 
-### `app/config.py`
+### 3.1 `app/config.py`
 
 Defines generic runtime configuration for:
 
@@ -82,11 +93,11 @@ Defines generic runtime configuration for:
 - Cookie behavior
 - Host and port
 
-### `app/services/agenda_parser.py`
+### 3.2 `app/services/agenda_parser.py`
 
 Loads and validates session data from the configured JSON schedule file, applies optional track filtering, applies the configured time window, and caches the normalized session catalog in memory.
 
-### `app/services/agenda_service.py`
+### 3.3 `app/services/agenda_service.py`
 
 Handles:
 
@@ -98,7 +109,7 @@ Handles:
 
 The service uses a re-entrant lock to protect the shared session catalog cache. User-specific agenda state is passed in from the cookie-backed request context.
 
-### `app/routes/api.py`
+### 3.4 `app/routes/api.py`
 
 Exposes:
 
@@ -110,7 +121,7 @@ Exposes:
 
 All agenda endpoints resolve the active browser agenda from middleware rather than a shared `default` agenda or process-local session map.
 
-### `app/routes/web.py`
+### 3.5 `app/routes/web.py`
 
 Renders:
 
@@ -120,7 +131,7 @@ Renders:
 
 Template context is built from the current configuration and the active cookie-backed agenda.
 
-### `app/main.py`
+### 3.6 `app/main.py`
 
 Provides:
 
@@ -130,25 +141,25 @@ Provides:
 - Cookie-backed agenda middleware
 - Health endpoint
 
-## Data Flow
+## 4. Data Flow
 
-### Session Loading
+### 4.1 Session Loading
 
 `JSON schedule file -> parser normalization -> optional track filter -> time window filter -> cache -> API/UI`
 
-### Agenda Selection
+### 4.2 Agenda Selection
 
 `browser action -> JS fetch -> API route -> agenda service -> overlap validation -> cookie-backed agenda update -> refreshed UI`
 
-### Export
+### 4.3 Export
 
 `cookie-backed agenda -> export model / iCalendar generation -> browser download`
 
-## Testing Strategy
+## 5. Testing Strategy
 
 The project keeps test scope aligned to supported runtime behavior.
 
-### Python Tests
+### 5.1 Python Tests
 
 `tests/test_parser.py`
 
@@ -161,7 +172,7 @@ The project keeps test scope aligned to supported runtime behavior.
 
 - Agenda creation
 - Overlap handling
-- Import validation
+- Import validation and conflict inspection
 - Clear/remove behavior
 
 `tests/test_api.py`
@@ -169,17 +180,17 @@ The project keeps test scope aligned to supported runtime behavior.
 - Health endpoint
 - Session retrieval
 - Agenda CRUD
-- Import validation
-- Export metadata
+- Import validation and successful imports
+- JSON and ICS export behavior
 - Browser isolation via separate cookie jars and stateless cookie-backed agendas
 
-### Local Container Smoke Test
+### 5.2 Local Container Smoke Test
 
 `scripts/run-local-container-tests.sh` builds and runs the container locally, then calls `testing/local_container_smoke_test.py`.
 
 This is the authoritative deployment verification path for the repository.
 
-## Current Constraints
+## 6. Current Constraints
 
 - Browser agendas are cookie-scoped and not shared across devices
 - No authenticated collaboration
