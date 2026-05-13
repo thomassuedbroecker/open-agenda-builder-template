@@ -126,3 +126,4 @@ celerybeat.pid
 # Bob
 .bob/
 prompts/
+docs/open-agenda-builder-template.code-workspace
